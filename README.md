@@ -84,6 +84,3 @@ https://github.com/Qihoo360/Atlas/blob/master/README_ZH.md
 ![创建mysql中间件中创建库](https://3jxq.com/public/upload/e0607a4f86cf2364219390d79a25d765.png)
 ![连接mysql主库](https://3jxq.com/public/upload/4ba6ce00ea8a0078be8da9a376b4ac60.png)
 其他效果图忽略啦。
-
-mysql测试
-mysql
