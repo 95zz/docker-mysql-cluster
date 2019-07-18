@@ -1,0 +1,81 @@
+version: '2'
+services:
+  proxy-client:
+    container_name: proxy-client
+    build:
+      context: .
+      dockerfile: proxy/Dockerfile
+    image: "proxy"
+    privileged: true
+    restart: always
+    links:
+      - mysql-master
+      - mysql-slave1
+      - mysql-slave2
+      - mysql-slave3
+    ports:
+      - "1234:1234"
+      - "2345:2345"
+    hostname: proxy-client 
+  mysql-master:
+    container_name: mysql-master
+    privileged: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "abc.123"
+    image: "mysql:5.7"
+    restart: always
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=1 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --explicit_defaults_for_timestamp=true --innodb_buffer_pool_size=100M
+    volumes:
+      - "./master/data:/var/lib/mysql"
+      - "./master/init:/docker-entrypoint-initdb.d/"
+    ports:
+      - "3306:3306"
+    hostname: mysql-master
+  mysql-slave1:
+    container_name: mysql-slave1
+    privileged: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "abc.123"
+    image: "mysql:5.7"
+    restart: always
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=2 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --innodb_buffer_pool_size=100M
+    depends_on:
+      - mysql-master
+    volumes:
+      - "./slave1/data:/var/lib/mysql"
+      - "./slave1/init:/docker-entrypoint-initdb.d/"
+    ports:
+      - "3307:3306"
+    hostname: mysql-slave1
+  mysql-slave2:
+    container_name: mysql-slave2
+    privileged: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "abc.123"
+    image: "mysql:5.7"
+    restart: always
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=3 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --innodb_buffer_pool_size=100M
+    depends_on:
+      - mysql-master
+    volumes:
+      - "./slave2/data:/var/lib/mysql"
+      - "./slave2/init:/docker-entrypoint-initdb.d/"
+    ports:
+      - "3308:3306"
+    hostname: mysql-slave2
+  mysql-slave3:
+    container_name: mysql-slave3
+    privileged: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "abc.123"
+    image: "mysql:5.7"
+    restart: always
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=4 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --innodb_buffer_pool_size=100M
+    depends_on:
+      - mysql-master
+    volumes:
+      - "./slave3/data:/var/lib/mysql"
+      - "./slave3/init:/docker-entrypoint-initdb.d/"
+    ports:
+      - "3309:3306"
+    hostname: mysql-slave3
