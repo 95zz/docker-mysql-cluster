@@ -78,3 +78,12 @@ https://github.com/Qihoo360/Atlas/blob/master/README_ZH.md
 更多关键字:
 数据一致性，半复制
 ```
+##部署后效果图
+![第一步:docker-compose up -d](https://3jxq.com/public/upload/b00cd02d3da7849dfac74bb4a0dbc04a.png)
+![连接proxy](https://3jxq.com/public/upload/813f859fe9c8ff006094265091eab668.png)
+![创建mysql中间件中创建库](https://3jxq.com/public/upload/e0607a4f86cf2364219390d79a25d765.png)
+![连接mysql主库](https://3jxq.com/public/upload/4ba6ce00ea8a0078be8da9a376b4ac60.png)
+其他效果图忽略啦。
+
+mysql测试
+mysql
