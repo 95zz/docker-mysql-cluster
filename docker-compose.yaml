@@ -1,11 +1,11 @@
 version: '2'
 services:
-  proxy-client:
-    container_name: proxy-client
+  mysql-proxy:
+    container_name: mysql-proxy
     build:
       context: .
       dockerfile: proxy/Dockerfile
-    image: "proxy"
+    image: "mysql-proxy"
     privileged: true
     restart: always
     links:
@@ -16,7 +16,7 @@ services:
     ports:
       - "1234:1234"
       - "2345:2345"
-    hostname: proxy-client 
+    hostname: mysql-proxy
   mysql-master:
     container_name: mysql-master
     privileged: true
@@ -25,6 +25,8 @@ services:
     image: "mysql:5.7"
     restart: always
     command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=1 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --explicit_defaults_for_timestamp=true --innodb_buffer_pool_size=100M
+    networks:
+      - mysql-net
     volumes:
       - "./master/data:/var/lib/mysql"
       - "./master/init:/docker-entrypoint-initdb.d/"
@@ -39,6 +41,8 @@ services:
     image: "mysql:5.7"
     restart: always
     command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=2 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --innodb_buffer_pool_size=100M
+    networks:
+      - mysql-net
     depends_on:
       - mysql-master
     volumes:
@@ -55,6 +59,8 @@ services:
     image: "mysql:5.7"
     restart: always
     command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=3 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --innodb_buffer_pool_size=100M
+    networks:
+      - mysql-net
     depends_on:
       - mysql-master
     volumes:
@@ -71,6 +77,8 @@ services:
     image: "mysql:5.7"
     restart: always
     command: --character-set-server=utf8 --collation-server=utf8_general_ci --server-id=4 --log-bin=mysql-bin --gtid-mode=ON --enforce-gtid-consistency=ON --innodb_buffer_pool_size=100M
+    networks:
+      - mysql-net
     depends_on:
       - mysql-master
     volumes:
@@ -79,3 +87,6 @@ services:
     ports:
       - "3309:3306"
     hostname: mysql-slave3
+networks:
+  mysql-net:
+     driver: bridge
